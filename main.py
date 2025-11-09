@@ -1,10 +1,10 @@
 import os
-from bale import Bot, Update, Message
+from bale import Bot
 
 bot = Bot(token=os.getenv("BOT_TOKEN"))
 
-@bot.on_message()
-def detect_packet(update: Update, message: Message):
+@bot.router.message()
+async def detect_packet(message):
     text = message.text or ""
     if "پاکت" not in text.lower():
         return
@@ -15,9 +15,9 @@ def detect_packet(update: Update, message: Message):
     user = message.from_user.first_name or "ناشناس"
 
     try:
-        result = bot.open_packet(packet_id=packet_id)
+        result = await bot.open_packet(packet_id=packet_id)
         amount = result.get("amount", 0)
-        bot.send_message(
+        await bot.send_message(
             chat_id=message.chat.id,
             reply_to_message_id=message.message_id,
             text=f"پاکت باز شد!\nمبلغ: {amount:,} تومان\nممنون {user} عزیز!"
