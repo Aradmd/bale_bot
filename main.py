@@ -3,7 +3,7 @@ from bale import Bot, Update, Message
 
 bot = Bot(token=os.getenv("BOT_TOKEN"))
 
-@bot.handler(message_type="text")
+@bot.on_message()
 def detect_packet(update: Update, message: Message):
     text = message.text or ""
     if "پاکت" not in text.lower():
